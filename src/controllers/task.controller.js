@@ -1,23 +1,22 @@
 import Task from '../models/task.model.js'
 
 export const getTasks = async (req, res) => {
+    const { page = 1, limit = 3 } = req.query; 
 
     try {
-
         const options = {
-            page: 1,
-            limit: 3,
-            populate: 'user'
-        }
+            page: parseInt(page), 
+            limit: parseInt(limit), 
+            populate: 'user' 
+        };
 
-        const tasks = await Task.paginate({ "user": req.user.id }, options)
-        res.json(tasks)
+        const tasks = await Task.paginate({}, options);
+
+        res.json(tasks);
     } catch (error) {
-
-        res.status(500).json({ message: error.message })
-
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const getTask = async (req, res) => {
 
@@ -36,9 +35,9 @@ export const getTask = async (req, res) => {
 export const createTask = async (req, res) => {
 
     try {
-
+        
         const { title, description, date } = req.body
-
+      
         const newTask = new Task({
             title,
             description,
@@ -50,7 +49,7 @@ export const createTask = async (req, res) => {
         res.json(savedTask)
 
     } catch (error) {
-
+        console.log(error);
         res.status(500).json({ message: error })
 
     }
